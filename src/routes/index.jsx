@@ -8,6 +8,7 @@ import { BrowserRouter, Routes as Switch, Route } from 'react-router-dom'
 
 import { NotFound } from './components/NotFound'
 import { RequireAuth } from './components/RequireAuth'
+
 export function Routes() {
   return (
     <BrowserRouter>

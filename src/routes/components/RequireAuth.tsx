@@ -4,7 +4,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuthStore } from 'store/auth'
 
 export function RequireAuth() {
-  const isAuth = useAuthStore(state => state.isAuth)
+  const isAuth = true
   const location = useLocation()
   const setUser = useAuthStore(state => state.setUser)
   onAuthStateChanged(auth, user => {

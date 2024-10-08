@@ -12,7 +12,7 @@ import {
 } from 'matter-js'
 import { useCallback, useEffect, useState } from 'react'
 import { useAuthStore } from 'store/auth'
-import { useGameStore } from 'store/game'
+import { useSelector, useDispatch } from 'react-redux'
 import { random } from 'utils/random'
 
 import { LinesType, MultiplierValues } from './@types'
@@ -24,19 +24,19 @@ import {
   getMultiplierByLinesQnt,
   getMultiplierSound
 } from './config/multipliers'
+import { incrementGamesRunning, decrementGamesRunning } from '../../../../../store/game'
 
 export function Game() {
   // #region States
   const incrementCurrentBalance = useAuthStore(state => state.incrementBalance)
   const engine = Engine.create()
   const [lines, setLines] = useState<LinesType>(16)
-  const inGameBallsCount = useGameStore(state => state.gamesRunning)
-  const incrementInGameBallsCount = useGameStore(
-    state => state.incrementGamesRunning
-  )
-  const decrementInGameBallsCount = useGameStore(
-    state => state.decrementGamesRunning
-  )
+  const inGameBallsCount = useSelector(state => state.games)
+
+  const dispatch = useDispatch()
+  const incrementInGameBallsCount = () => dispatch(incrementGamesRunning(0))
+  const decrementInGameBallsCount = () => dispatch(decrementGamesRunning(0))
+
   const [lastMultipliers, setLastMultipliers] = useState<number[]>([])
   const {
     pins: pinsConfig,
@@ -124,6 +124,9 @@ export function Game() {
 
   const addBall = useCallback(
     (ballValue: number) => {
+      if (ballValue <= 0) {
+        return
+      }
       addInGameBall()
       const ballSound = new Audio(ballAudio)
       ballSound.volume = 0.2
@@ -142,7 +145,7 @@ export function Game() {
       const ballColor = ballValue <= 0 ? colors.text : colors.purple
       const ball = Bodies.circle(ballX, 20, ballConfig.ballSize, {
         restitution: 1,
-        friction: 0.6,
+        friction: 0,
         label: `ball-${ballValue}`,
         id: new Date().getTime(),
         frictionAir: 0.05,
@@ -174,9 +177,9 @@ export function Game() {
   )
   const rightWall = Bodies.rectangle(
     worldWidth -
-      pinsConfig.pinSize * pinsConfig.pinGap -
-      pinsConfig.pinGap -
-      pinsConfig.pinGap / 2,
+    pinsConfig.pinSize * pinsConfig.pinGap -
+    pinsConfig.pinGap -
+    pinsConfig.pinGap / 2,
     worldWidth / 2 - pinsConfig.pinSize,
     worldWidth * 2,
     40,

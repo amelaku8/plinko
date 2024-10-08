@@ -1,27 +1,28 @@
-import create from 'zustand'
+import { createSlice } from "@reduxjs/toolkit"
 
-interface Game {
-  gamesRunning: number
-  setGamesRunning: (gamesRunning: number) => void
-  incrementGamesRunning: () => void
-  decrementGamesRunning: () => void
-}
+const gameSlice = createSlice({
+  name: "Game",
+  initialState: 0,
+  reducers: {
+    setGamesRunning: (state, action) => {
 
-export const useGameStore = create<Game>((set, get) => ({
-  gamesRunning: 0,
-  setGamesRunning: (gamesRunning: number) => {
-    set({ gamesRunning })
-  },
-  incrementGamesRunning: () => {
-    const gamesRunning = get().gamesRunning
-    const calc = gamesRunning + 1
+      return action.payload
+    },
+    incrementGamesRunning: (state, action) => {
+      if ((action.payload + state) < 0) {
+        return 1
+      }
+      return (state + 1)
+    },
+    decrementGamesRunning: (state, action) => {
+      if ((action.payload - state) < 0) {
+        return 0
+      }
+      return (state - 1)
+    }
 
-    set({ gamesRunning: calc < 0 ? 1 : calc })
-  },
-  decrementGamesRunning: () => {
-    const gamesRunning = get().gamesRunning
-    const calc = gamesRunning - 1
 
-    set({ gamesRunning: calc < 0 ? 0 : calc })
   }
-}))
+})
+export default gameSlice.reducer
+export const { setGamesRunning, incrementGamesRunning, decrementGamesRunning } = gameSlice.actions

@@ -5,7 +5,36 @@ import { auth, database } from 'lib/firebase'
 import toast from 'react-hot-toast'
 import { random } from 'utils/random'
 import create from 'zustand'
+import { createSlice } from '@reduxjs/toolkit'
 
+const userSlice = createSlice({
+  name : "user",
+  initialState : {
+    user: "",
+    balance: 0,
+    isAuth : false,
+  
+  },
+  reducers : {
+    setUser : (state,action) => {
+      state.user = action.payload.name
+      state.isAuth = true
+      state.balance= action.payload.balance
+    },
+    setBalance: (state,action) => {
+      state.balance = action.payload
+
+    },
+    redeemGift : (state,action) => {
+      state.balance = action.payload
+
+    }
+
+  }
+})
+
+export default userSlice.reducer
+export const {setUser,setBalance,redeemGift} = userSlice.actions
 interface User {
   id: string
   name: string
@@ -21,8 +50,6 @@ interface State {
   user: User
   wallet: Wallet
   isAuth: boolean
-  signIn: () => Promise<void>
-  signOut: () => Promise<void>
   setUser: (user: User) => void
   isAuthLoading: boolean
   isWalletLoading: boolean
@@ -46,13 +73,13 @@ function clearUser() {
 }
 
 const userInitialState: User = {
-  id: '',
-  name: '',
-  email: ''
+  id: 'bacd j',
+  name: 'afe    jhdsaf',
+  email: 'faefaef '
 }
 
 const walletInitialState: Wallet = {
-  balance: 0
+  balance: 100
 }
 
 export const useAuthStore = create<State>((setState, getState) => ({
@@ -60,7 +87,7 @@ export const useAuthStore = create<State>((setState, getState) => ({
   wallet: walletInitialState,
   isAuthLoading: false,
   isWalletLoading: false,
-  isAuth: false,
+  isAuth: true,
   setBalance: (balance: number) => {
     try {
       setState(
@@ -129,46 +156,6 @@ export const useAuthStore = create<State>((setState, getState) => ({
     } catch (error) {
       toast.error('Ocorreu um erro ao atualizar o saldo')
       console.error('decrementBalanceError', error)
-    }
-  },
-  signIn: async () => {
-    try {
-      setState(state => ({ ...state, isAuthLoading: true }))
-      const provider = new GoogleAuthProvider()
-      const { user } = await signInWithPopup(auth, provider)
-      const { uid: id, displayName: name, photoURL: profilePic, email } = user
-      if (name && email) {
-        const newUser = { id, name, email, profilePic: profilePic || '' }
-        storeUser(newUser)
-        setState(
-          produce<State>(state => {
-            state.user = newUser
-            state.isAuth = true
-            state.isAuthLoading = false
-          })
-        )
-      }
-      setState(state => ({ ...state, isLoading: false }))
-    } catch (error) {
-      toast.error('Ocorreu um erro ao fazer login')
-      console.error('signInError', error)
-    }
-  },
-  signOut: async () => {
-    try {
-      setState(state => ({ ...state, isAuthLoading: true }))
-      await auth.signOut()
-      clearUser()
-      setState(
-        produce<State>(state => {
-          state.user = userInitialState
-          state.isAuth = false
-          state.isAuthLoading = false
-        })
-      )
-    } catch (error) {
-      toast.error('Ocorreu um erro ao fazer logout')
-      console.error('signOutError', error)
     }
   },
   setUser: (user: User) => {

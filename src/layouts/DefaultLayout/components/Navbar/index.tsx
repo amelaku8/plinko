@@ -3,12 +3,12 @@ import classNames from 'classnames'
 import { Gift, SignOut } from 'phosphor-react'
 import { Link } from 'react-router-dom'
 import { useAuthStore } from 'store/auth'
-import { useGameStore } from 'store/game'
+import { useSelector } from 'react-redux'
 
 import { WalletCard } from '../WalletCard'
 
 export function Navbar() {
-  const inGameBallsCount = useGameStore(state => state.gamesRunning)
+  const inGameBallsCount = useSelector(state => state.games)
   const currentBalance = useAuthStore(state => state.wallet.balance)
   const isAuth = useAuthStore(state => state.isAuth)
   const signOut = useAuthStore(state => state.signOut)

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useGameStore } from 'store/game'
+import { useSelector } from 'react-redux'
 
 import { Game } from './components/Game'
 
@@ -11,7 +11,7 @@ export function PlinkoGamePage() {
       e.returnValue = ''
     }
   }
-  const gamesRunning = useGameStore(state => state.gamesRunning)
+  const gamesRunning = useSelector(state => state.games)
   useEffect(() => {
     window.addEventListener('beforeunload', alertUser)
     return () => {
