@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { Crown, FinnTheHuman } from 'phosphor-react'
-import { useAuthStore } from 'store/auth'
 import { formatPoints } from 'utils/currencyFormat'
+import { useSelector } from 'react-redux'
 
 interface User {
   name: string
@@ -12,7 +12,7 @@ interface User {
 }
 
 export function Profile(user: User) {
-  const authUser = useAuthStore(state => state.user)
+  const authUser = useSelector(state => state.user)
   return (
     <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-primary p-2 px-6 text-text">
       <div className="relative mx-auto w-32 rounded-full">

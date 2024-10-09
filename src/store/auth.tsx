@@ -20,7 +20,7 @@ const userSlice = createSlice({
 
     },
     incrementBalance: (state, action) => {
-      state.balance = state.balance - action.payload
+      state.balance = state.balance + action.payload
     },
 
     redeemGift: (state, action) => {

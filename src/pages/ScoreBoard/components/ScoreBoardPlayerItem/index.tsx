@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { User } from 'pages/ScoreBoard/@types/player'
 import { Crown, FinnTheHuman } from 'phosphor-react'
-import { useAuthStore } from 'store/auth'
+import { useSelector } from 'react-redux'
 import { formatPoints } from 'utils/currencyFormat'
 
 interface ScoreBoardPlayerItemProps {
@@ -15,7 +15,7 @@ export function ScoreBoardPlayerItem({
   position,
   onClick
 }: ScoreBoardPlayerItemProps) {
-  const user = useAuthStore(state => state.user)
+  const user = useSelector(state => state.user)
   return (
     <button
       onClick={onClick}

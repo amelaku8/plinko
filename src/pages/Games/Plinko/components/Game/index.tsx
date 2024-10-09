@@ -11,7 +11,6 @@ import {
   World
 } from 'matter-js'
 import { useCallback, useEffect, useState } from 'react'
-import { useAuthStore } from 'store/auth'
 import { useSelector, useDispatch } from 'react-redux'
 import { random } from 'utils/random'
 

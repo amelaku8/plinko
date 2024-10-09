@@ -1,14 +1,13 @@
 import { Gift } from 'phosphor-react'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useAuthStore } from 'store/auth'
 import { formatPoints } from 'utils/currencyFormat'
 
 export function Gifts() {
-  const redeemGift = useAuthStore(state => state.redeemGift)
-  const currentBalance = useAuthStore(state => state.wallet.balance)
+  const currentBalance = useSelector(state => state.user.balance)
   const navigate = useNavigate()
   async function handleRedeemGift() {
-    await redeemGift()
+
     navigate('/')
   }
   return (
