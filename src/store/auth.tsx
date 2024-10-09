@@ -8,24 +8,24 @@ import create from 'zustand'
 import { createSlice } from '@reduxjs/toolkit'
 
 const userSlice = createSlice({
-  name : "user",
-  initialState : {
+  name: "user",
+  initialState: {
     user: "",
     balance: 0,
-    isAuth : false,
-  
+    isAuth: false,
+
   },
-  reducers : {
-    setUser : (state,action) => {
+  reducers: {
+    setUser: (state, action) => {
       state.user = action.payload.name
       state.isAuth = true
-      state.balance= action.payload.balance
+      state.balance = action.payload.balance
     },
-    setBalance: (state,action) => {
+    setBalance: (state, action) => {
       state.balance = action.payload
 
     },
-    redeemGift : (state,action) => {
+    redeemGift: (state, action) => {
       state.balance = action.payload
 
     }
@@ -34,7 +34,7 @@ const userSlice = createSlice({
 })
 
 export default userSlice.reducer
-export const {setUser,setBalance,redeemGift} = userSlice.actions
+export const { setUser, setBalance, redeemGift } = userSlice.actions
 interface User {
   id: string
   name: string
@@ -82,7 +82,7 @@ const walletInitialState: Wallet = {
   balance: 100
 }
 
-export const useAuthStore = create<State>((setState, getState) => ({
+export const useAuthStore = create < State > ((setState, getState) => ({
   user: userInitialState,
   wallet: walletInitialState,
   isAuthLoading: false,
@@ -91,7 +91,7 @@ export const useAuthStore = create<State>((setState, getState) => ({
   setBalance: (balance: number) => {
     try {
       setState(
-        produce<State>(state => {
+        produce < State > (state => {
           state.wallet.balance = balance
           state.isWalletLoading = false
         })
@@ -161,7 +161,7 @@ export const useAuthStore = create<State>((setState, getState) => ({
   setUser: (user: User) => {
     try {
       setState(
-        produce<State>(state => {
+        produce < State > (state => {
           state.user = user
           state.isAuth = true
           state.isAuthLoading = false

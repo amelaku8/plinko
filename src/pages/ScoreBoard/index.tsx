@@ -18,31 +18,38 @@ interface UserWithPosition extends User {
 }
 
 export function ScoreBoardPage() {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const dbRef = ref(database, 'wallet')
-  const [scoreBoard, setScoreBoard] = useState<ScoreBoard[]>([])
+  // const [scoreBoard, setScoreBoard] = useState<ScoreBoard[]>([])
   const [userProfile, setUserProfile] = useState<UserWithPosition | undefined>(
     undefined
   )
+  // Populate the scoreboard from database
 
   useEffect(() => {
     const getScoreBoardData = async () => {
-      setIsLoading(true)
+      setIsLoading(false)
       const snapshot = await get(dbRef)
       const data = Object.values(snapshot.val()) as unknown as ScoreBoard[]
       const sortedData = data
         .sort((a, b) => b.currentBalance - a.currentBalance)
         .slice(0, 10)
-      setScoreBoard(sortedData)
+      //setScoreBoard(sortedData)
       setIsLoading(false)
     }
 
     getScoreBoardData()
 
     return () => {
-      setScoreBoard([])
+      //setScoreBoard([])
     }
   }, [])
+  const scoreBoard = [
+    {
+      currentBalance: 2342,
+      user: { name: "feaf" }
+    }
+  ]
 
   return (
     <div className="flex h-full flex-col items-center justify-center gap-4">
