@@ -24,11 +24,12 @@ import {
   getMultiplierByLinesQnt,
   getMultiplierSound
 } from './config/multipliers'
+import { incrementBalance } from 'store/auth'
 import { incrementGamesRunning, decrementGamesRunning } from '../../../../../store/game'
 
 export function Game() {
   // #region States
-  const incrementCurrentBalance = useAuthStore(state => state.incrementBalance)
+  const incrementCurrentBalance = (balance) => dispatch(incrementBalance(balance))
   const engine = Engine.create()
   const [lines, setLines] = useState<LinesType>(16)
   const inGameBallsCount = useSelector(state => state.games)
@@ -257,7 +258,7 @@ export function Game() {
     if (+ballValue <= 0) return
 
     const newBalance = +ballValue * multiplierValue
-    await incrementCurrentBalance(newBalance)
+    incrementCurrentBalance(newBalance)
   }
   async function onBodyCollision(event: IEventCollision<Engine>) {
     const pairs = event.pairs

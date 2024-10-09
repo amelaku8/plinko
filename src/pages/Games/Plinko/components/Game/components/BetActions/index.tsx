@@ -1,7 +1,7 @@
 import { Coin, CurrencyDollarSimple, Smiley } from 'phosphor-react'
 import { ChangeEvent, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useAuthStore } from 'store/auth'
+import { useSelector, useDispatch } from 'react-redux'
+import { setUser, decrementBalance, incrementBalance, redeemGift } from 'store/auth'
 
 import { LinesType } from '../../@types'
 
@@ -16,16 +16,16 @@ export function BetActions({
   onChangeLines,
   inGameBallsCount
 }: PlinkoBetActions) {
-  const isLoading = useAuthStore(state => state.isWalletLoading)
-  const currentBalance = useAuthStore(state => state.wallet.balance)
-  const decrementCurrentBalance = useAuthStore(state => state.decrementBalance)
-  const isAuth = useAuthStore(state => state.isAuth)
+  const isLoading = useSelector(state => state.user.isWalletLoading)
+  const isAuth = true
+  const currentBalance = useSelector(state => state.user.balance)
   const [betValue, setBetValue] = useState(0)
   const maxLinesQnt = 16
   const linesOptions: number[] = []
   for (let i = 8; i <= maxLinesQnt; i++) {
     linesOptions.push(i)
   }
+  const dispatch = useDispatch()
 
   function handleChangeBetValue(e: ChangeEvent<HTMLInputElement>) {
     if (!isAuth || isLoading) return
@@ -66,7 +66,7 @@ export function BetActions({
     setBetValue(currentBalance)
   }
 
-  async function handleRunBet() {
+  function handleRunBet() {
     if (!isAuth || isLoading) return
     if (inGameBallsCount >= 15) return
     if (betValue > currentBalance) {
@@ -75,7 +75,7 @@ export function BetActions({
     }
     onRunBet(betValue)
     if (betValue <= 0) return
-    await decrementCurrentBalance(betValue)
+    dispatch(decrementBalance(betValue))
   }
 
   return (
